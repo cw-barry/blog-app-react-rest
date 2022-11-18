@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import {
   Collapse,
   Navbar,
@@ -8,26 +10,47 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap';
+import { AppContext } from '../context/AppContext';
 
 const NavbarItem = () => {
   const [collapsed, setCollapsed] = useState(true);
+  const { userInfo, logout } = useContext(AppContext);
+  const navigate = useNavigate();
+
   const toggleNavbar = () => setCollapsed(!collapsed);
 
   const pages = [
     {
       title: 'Dasboard',
       link: '/',
+      display: true,
     },
     {
       title: 'Create New Post',
       link: '/post/create',
+      display: true,
     },
     {
       title: 'My Profile',
       link: '/profile/',
+      display: true,
+    },
+    {
+      title: 'Login',
+      link: '/auth/login',
+      display: userInfo ? false : true,
+    },
+    {
+      title: 'Register',
+      link: '/auth/register',
+      display: userInfo ? false : true,
     },
     {
       title: 'Logout',
+      display: userInfo ? true : false,
+      handler: () => {
+        logout(navigate);
+      },
     },
   ];
 
@@ -40,13 +63,19 @@ const NavbarItem = () => {
         <NavbarToggler onClick={toggleNavbar} className="me-2 bg-white" />
         <Collapse isOpen={!collapsed} navbar>
           <Nav className="ml-auto" navbar>
-            {pages.map((item, idx) => (
-              <NavItem key={idx}>
-                <NavLink className="text-white" href={item.link}>
-                  {item.title}
-                </NavLink>
-              </NavItem>
-            ))}
+            {pages
+              .filter((item) => item.display)
+              .map((item, idx) => (
+                <NavItem key={idx}>
+                  <NavLink
+                    className="text-white"
+                    href={item.link}
+                    onClick={item?.handler}
+                  >
+                    {item.title}
+                  </NavLink>
+                </NavItem>
+              ))}
           </Nav>
         </Collapse>
       </Navbar>

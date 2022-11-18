@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Button,
   Card,
@@ -7,45 +7,52 @@ import {
   CardSubtitle,
   CardText,
   CardTitle,
-} from "reactstrap";
-import { BiLike, BiCommentDots } from "react-icons/bi";
-import { Link } from "react-router-dom";
+} from 'reactstrap';
+import { BiLike, BiCommentDots, BiBullseye } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
 
-const BlogCard = () => {
+const BlogCard = ({
+  data: {
+    author,
+    title,
+    content,
+    image,
+    published_date,
+    view_count,
+    like_count,
+    comment_count,
+  },
+}) => {
   return (
     <Card>
-      <CardImg
-        alt="Card image cap"
-        src="https://picsum.photos/318/180"
-        top
-        width="100%"
-      />
+      <CardImg alt="Card image cap" src={image} top width="100%" />
       <CardBody>
-        <CardTitle tag="h5">Card title</CardTitle>
+        <CardTitle tag="h5">{title}</CardTitle>
         <div className="d-flex justify-content-between">
           <CardSubtitle className="mb-2 text-muted" tag="h6">
-            Author: Mustafa Basar
+            Author: {author}
           </CardSubtitle>
           <CardSubtitle className="mb-2 text-muted" tag="h6">
-            17 Kasım 2022
+            {new Date(published_date).toLocaleString()}
           </CardSubtitle>
         </div>
-        <CardText>
-          This card has supporting text below as a natural lead-in to additional
-          content.
-        </CardText>
+        <CardText>{content}</CardText>
         <div className="d-flex justify-content-between align-items-center">
           <Link to="/post/details">
             <Button>See More</Button>
           </Link>
           <div className="d-flex gap-2">
             <span className="d-flex align-items-center justify-content-center">
-              2
+              {like_count}
               <BiLike className="fs-4" />
             </span>
             <span>
-              2
+              {comment_count}
               <BiCommentDots className="fs-4" />
+            </span>
+            <span>
+              {view_count}
+              <BiBullseye className="fs-4" />
             </span>
           </div>
         </div>

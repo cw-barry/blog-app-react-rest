@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from 'react';
 import {
   Button,
   Col,
@@ -7,52 +7,92 @@ import {
   FormText,
   Input,
   Label,
-} from "reactstrap";
-import { Layout } from "../components/";
-
+} from 'reactstrap';
+import { Layout } from '../components/';
+import { useNavigate } from 'react-router-dom';
+import { BlogContext } from '../context/BlogContext';
 const CreateBlog = () => {
+  const navigate = useNavigate();
+  const { addBlog } = useContext(BlogContext);
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+    image: null,
+  });
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target?.files?.[0] || e.target.value,
+    });
+    // if (e.target.name === 'image') {
+    //   setFormData({
+    //     ...formData,
+    //     image: e.target.files[0],
+    //   });
+    // } else
+    //   setFormData({
+    //     ...formData,
+    //     [e.target.name]: e.target.value,
+    //   });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formData.title && formData.content) addBlog(formData, navigate);
+  };
   return (
     <Layout>
       <div className="container mt-5">
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <FormGroup row>
-            <Label sm={2}>Blog Title</Label>
+            <Label for="title" sm={2}>
+              Blog Title
+            </Label>
             <Col sm={10}>
-              <Input placeholder="Enter a title" type="text" />
+              <Input
+                name="title"
+                id="title"
+                placeholder="Enter a title"
+                type="text"
+                value={formData.title}
+                onChange={handleChange}
+              />
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label sm={2}>Blog</Label>
+            <Label for="content" sm={2}>
+              Blog
+            </Label>
             <Col sm={10}>
               <Input
+                value={formData.content}
+                onChange={handleChange}
+                name="content"
+                id="content"
                 placeholder="Type something"
                 type="textarea"
                 style={{
-                  resize: "none",
-                  height: "15rem",
+                  resize: 'none',
+                  height: '15rem',
                 }}
               />
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label sm={2}>Select Image</Label>
+            <Label id="image" sm={2}>
+              Select Image
+            </Label>
             <Col sm={10}>
-              <Input name="file" type="file" />
+              <Input
+                id="image"
+                name="image"
+                type="file"
+                accept="image/*"
+                onChange={handleChange}
+              />
               <FormText>Choose the image for your blog</FormText>
             </Col>
           </FormGroup>
-          <FormGroup row>
-            <Label sm={2}>CheckBox</Label>
-            <Col
-              sm={{
-                size: 10,
-              }}
-            >
-              <FormGroup check>
-                <Input type="checkbox" /> <Label check>Check me out</Label>
-              </FormGroup>
-            </Col>
-          </FormGroup>
+
           <FormGroup check row>
             <Col
               sm={{

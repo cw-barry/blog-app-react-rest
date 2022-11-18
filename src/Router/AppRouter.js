@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AppContext } from '../context/AppContext';
+import PrivateRouter from './PrivateRouter';
 import {
   Login,
   Register,
@@ -10,33 +12,18 @@ import {
 } from '../pages';
 
 const AppRouter = () => {
-  const userInfo = false;
+  const { userInfo } = useContext(AppContext);
   return (
     <BrowserRouter>
       <Routes>
-        {/* Main */}
-        <Route path="/" element={userInfo ? <Dashboard /> : <Login />} />
-        <Route
-          path="/post/details"
-          element={userInfo ? <BlogCardDetails /> : <Login />}
-        />
-        <Route
-          path="/post/create"
-          element={userInfo ? <CreateBlog /> : <Login />}
-        />
-        <Route
-          path="/profile"
-          element={userInfo ? <UserProfile /> : <Login />}
-        />
-        {/* Auth */}
-        <Route
-          path="/auth/login"
-          element={userInfo ? <Dashboard /> : <Login />}
-        />
-        <Route
-          path="/auth/register"
-          element={userInfo ? <Dashboard /> : <Register />}
-        />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<PrivateRouter />}>
+          <Route path="post/details" element={<BlogCardDetails />} />
+          <Route path="post/create" element={<CreateBlog />} />
+          <Route path="profile" element={<UserProfile />} />
+        </Route>
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
