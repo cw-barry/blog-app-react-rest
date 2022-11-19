@@ -62,6 +62,32 @@ const AppContextProvider = ({ children }) => {
     navigate('/');
   };
 
+  const updateUser = async (userData, navigate) => {
+    console.log(userData);
+    try {
+      const res = await axios({
+        method: 'patch',
+        url: `${baseUrl}account/user/`,
+        data: userData,
+        headers: {
+          Authorization: `Token ${userInfo.key}`,
+        },
+      });
+      console.log(res);
+
+      setUserInfo({
+        ...userInfo,
+        first_name: res.data.first_name,
+        last_name: res.data.last_name,
+      });
+      toastNotify('User Updated successfully', 'success');
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+      toastNotify(err.message, 'error');
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -71,6 +97,7 @@ const AppContextProvider = ({ children }) => {
         logout,
         loginUser,
         checkUser,
+        updateUser,
       }}
     >
       {children}

@@ -1,59 +1,52 @@
-import React from "react";
-import { Layout } from "../components/";
-import {
-  Button,
-  Col,
-  Form,
-  FormGroup,
-  FormText,
-  Input,
-  Label,
-  Row,
-} from "reactstrap";
+import React, { useContext, useState } from 'react';
+import { Layout } from '../components/';
+import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
+import { AppContext } from '../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 const UserProfile = () => {
+  const { userInfo, updateUser } = useContext(AppContext);
+  const [formData, setFormData] = useState({
+    first_name: userInfo?.first_name || '',
+    last_name: userInfo?.last_name || '',
+  });
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updateUser(formData, navigate);
+  };
   return (
     <Layout>
-      <Form className="container mt-4">
-        <Row>
-          <Col md={6}>
-            <FormGroup>
-              <Label>Email</Label>
-              <Input placeholder="with a placeholder" type="email" />
-            </FormGroup>
-          </Col>
-          <Col md={6}>
-            <FormGroup>
-              <Label>Password</Label>
-              <Input placeholder="password placeholder" type="password" />
-            </FormGroup>
-          </Col>
-        </Row>
+      <Form className="container mt-4" onSubmit={handleSubmit}>
         <FormGroup>
-          <Label sm={2}>Select Image</Label>
-          <Input name="file" type="file" />
-          <FormText>
-            This is some placeholder block-level help text for the above input.
-            It‘s a bit lighter and easily wraps to a new line.
-          </FormText>
+          <Label>Email</Label>
+          <Input placeholder="with a placeholder" type="email" disabled />
         </FormGroup>
         <FormGroup>
-          <Label>About me</Label>
+          <Label for="first_name">First Name</Label>
           <Input
-            placeholder="Ex: I like reading books, playing computer games and coding."
-            type="textarea"
-            style={{
-              resize: "none",
-              height: "5rem",
-            }}
+            id="first_name"
+            name="first_name"
+            placeholder="First Name"
+            type="text"
+            value={formData.first_name}
+            onChange={handleChange}
           />
         </FormGroup>
-        <FormGroup check>
-          <Input id="exampleCheck" name="check" type="checkbox" />
-          <Label check for="exampleCheck">
-            Allow Changes
-          </Label>
+        <FormGroup>
+          <Label for="last_name">Last Name</Label>
+          <Input
+            id="last_name"
+            name="last_name"
+            placeholder="Last Name"
+            type="text"
+            value={formData.last_name}
+            onChange={handleChange}
+          />
         </FormGroup>
-        <Button style={{ width: "100%", marginTop: "2rem" }}>Submit</Button>
+        <Button style={{ width: '100%', marginTop: '2rem' }}>Submit</Button>
       </Form>
     </Layout>
   );
