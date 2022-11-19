@@ -9,14 +9,16 @@ import {
   Label,
 } from 'reactstrap';
 import { Layout } from '../components/';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BlogContext } from '../context/BlogContext';
 const CreateBlog = () => {
   const navigate = useNavigate();
-  const { addBlog } = useContext(BlogContext);
+  const location = useLocation();
+  const isUpdate = location.state?.isUpdate;
+  const { addBlog, updateBlog, currentBlog } = useContext(BlogContext);
   const [formData, setFormData] = useState({
-    title: '',
-    content: '',
+    title: isUpdate ? currentBlog?.title : '',
+    content: isUpdate ? currentBlog?.content : '',
     image: null,
   });
   const handleChange = (e) => {
@@ -24,20 +26,13 @@ const CreateBlog = () => {
       ...formData,
       [e.target.name]: e.target?.files?.[0] || e.target.value,
     });
-    // if (e.target.name === 'image') {
-    //   setFormData({
-    //     ...formData,
-    //     image: e.target.files[0],
-    //   });
-    // } else
-    //   setFormData({
-    //     ...formData,
-    //     [e.target.name]: e.target.value,
-    //   });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData.title && formData.content) addBlog(formData, navigate);
+    if (formData.title && formData.content) {
+      if (isUpdate) updateBlog(currentBlog?.id, formData, navigate);
+      else addBlog(formData, navigate);
+    }
   };
   return (
     <Layout>

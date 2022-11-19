@@ -12,13 +12,14 @@ import {
 } from '../pages';
 
 const AppRouter = () => {
-  const { userInfo } = useContext(AppContext);
+  // const { userInfo } = useContext(AppContext);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/" element={<PrivateRouter />}>
-          <Route path="post/details" element={<BlogCardDetails />} />
+          <Route path="post/details/:id" element={<BlogCardDetails />} />
           <Route path="post/create" element={<CreateBlog />} />
           <Route path="profile" element={<UserProfile />} />
         </Route>

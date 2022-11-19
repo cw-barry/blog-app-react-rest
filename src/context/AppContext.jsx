@@ -3,13 +3,13 @@ import axios from 'axios';
 import { toastNotify } from '../helper/Toastify';
 
 export const AppContext = createContext();
-const baseUrl = 'https://cwbarry.pythonanywhere.com/';
-// const baseUrl = 'https://20001.fullstack.clarusway.com/';
+// const baseUrl = 'https://cwbarry.pythonanywhere.com/';
+const baseUrl = 'https://20001.fullstack.clarusway.com/';
 
 const AppContextProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(null);
 
-  useEffect(() => {
+  const checkUser = () => {
     if (userInfo) {
       localStorage.setItem('user', JSON.stringify(userInfo));
     } else {
@@ -18,6 +18,12 @@ const AppContextProvider = ({ children }) => {
         setUserInfo(JSON.parse(user));
       }
     }
+  };
+
+  if (!userInfo) checkUser();
+
+  useEffect(() => {
+    checkUser();
   }, [userInfo]);
 
   const registerUser = async (userData, navigate) => {
@@ -58,7 +64,14 @@ const AppContextProvider = ({ children }) => {
 
   return (
     <AppContext.Provider
-      value={{ userInfo, setUserInfo, registerUser, logout, loginUser }}
+      value={{
+        userInfo,
+        setUserInfo,
+        registerUser,
+        logout,
+        loginUser,
+        checkUser,
+      }}
     >
       {children}
     </AppContext.Provider>

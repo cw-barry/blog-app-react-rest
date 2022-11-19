@@ -21,6 +21,7 @@ const BlogCard = ({
     view_count,
     like_count,
     comment_count,
+    id,
   },
 }) => {
   return (
@@ -38,7 +39,7 @@ const BlogCard = ({
         </div>
         <CardText>{content}</CardText>
         <div className="d-flex justify-content-between align-items-center">
-          <Link to="/post/details">
+          <Link to={`/post/details/${id}`}>
             <Button>See More</Button>
           </Link>
           <div className="d-flex gap-2">
