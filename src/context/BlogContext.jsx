@@ -4,8 +4,8 @@ import { toastNotify } from '../helper/Toastify';
 import { AppContext } from './AppContext';
 
 export const BlogContext = createContext();
-// const baseUrl = 'https://cwbarry.pythonanywhere.com/';
-const baseUrl = 'https://20001.fullstack.clarusway.com/';
+const baseUrl = 'https://cwbarry.pythonanywhere.com/';
+// const baseUrl = 'https://20001.fullstack.clarusway.com/';
 
 const BlogContextProvider = ({ children }) => {
   const { userInfo } = useContext(AppContext);
